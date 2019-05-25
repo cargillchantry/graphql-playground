@@ -1,0 +1,7 @@
+micronaut:
+  application:
+    name: gqlexample
+
+graphql:
+  graphiql:
+    enabled: true

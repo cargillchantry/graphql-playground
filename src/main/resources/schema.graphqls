@@ -1,0 +1,14 @@
+type Query {
+    exercises: [Exercise!]!
+}
+
+type Mutation {
+    createExercise(exerciseType: String, duration: String): Exercise
+}
+
+type Exercise {
+    id: ID!
+    exerciseType: String!
+    duration: String!
+}
+
