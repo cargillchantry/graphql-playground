@@ -1,14 +1,21 @@
 type Query {
-    exercises: [Exercise!]!
+    exercises(exerciseType: ExerciseType): [Exercise!]!
 }
 
 type Mutation {
-    createExercise(exerciseType: String, duration: String): Exercise
+    createExercise(exerciseType: ExerciseType, duration: String): Exercise
 }
 
 type Exercise {
     id: ID!
-    exerciseType: String!
+    exerciseType: ExerciseType!
     duration: String!
 }
 
+enum ExerciseType {
+    RUN
+    WALK
+    HIKE
+    SWIM
+    BIKE
+}

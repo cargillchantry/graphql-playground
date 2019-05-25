@@ -13,6 +13,7 @@ import javax.inject.Singleton;
 import java.time.Duration;
 
 import static gqlexample.exercise.fetchers.ExerciseFieldName.CREATE_EXERCISE;
+import static gqlexample.utils.NullUtils.nullSafeMap;
 
 @Singleton
 public class ExerciseCreateFetcher implements DataFetcherWithWiring<Exercise> {
@@ -38,8 +39,14 @@ public class ExerciseCreateFetcher implements DataFetcherWithWiring<Exercise> {
     public Exercise get(final DataFetchingEnvironment dataFetchingEnvironment) {
         return exerciseRepository.save(
             Exercise.builder()
-                .setExerciseType(ExerciseType.valueOf(dataFetchingEnvironment.getArgument("exerciseType")))
-                .setDuration(Duration.parse(dataFetchingEnvironment.getArgument("duration")))
+                .setExerciseType(nullSafeMap(
+                    dataFetchingEnvironment.<String>getArgument("exerciseType"),
+                    ExerciseType::valueOf
+                ))
+                .setDuration(nullSafeMap(
+                    dataFetchingEnvironment.<String>getArgument("duration"),
+                    Duration::parse
+                ))
                 .build()
         );
     }

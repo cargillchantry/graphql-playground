@@ -1,6 +1,7 @@
 package gqlexample.exercise.fetchers;
 
 import gqlexample.exercise.Exercise;
+import gqlexample.exercise.ExerciseType;
 import gqlexample.exercise.repository.ExerciseRepository;
 import gqlexample.gql.DataFetcherWithWiring;
 import gqlexample.gql.WiringTypeName;
@@ -23,6 +24,11 @@ public class ExerciseFetcher implements DataFetcherWithWiring<List<Exercise>> {
 
     @Override
     public List<Exercise> get(final DataFetchingEnvironment env) {
+        if(env.containsArgument("exerciseType")) {
+            return exerciseRepository.findBy(
+                exercise -> exercise.getExerciseType() == ExerciseType.valueOf(env.getArgument("exerciseType"))
+            );
+        }
         return exerciseRepository.findAll();
     }
 

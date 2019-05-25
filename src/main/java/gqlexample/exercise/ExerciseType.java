@@ -1,5 +1,5 @@
 package gqlexample.exercise;
 
 public enum ExerciseType {
-    RUN, WALK, SWIM, BIKE
+    RUN, WALK, HIKE, SWIM, BIKE
 }
