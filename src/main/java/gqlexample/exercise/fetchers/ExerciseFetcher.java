@@ -1,11 +1,9 @@
 package gqlexample.exercise.fetchers;
 
 import gqlexample.exercise.Exercise;
-import gqlexample.exercise.ExerciseType;
 import gqlexample.exercise.repository.ExerciseRepository;
 import gqlexample.exercise.specification.ExerciseSpecificationCombiner;
 import gqlexample.gql.DataFetcherWithWiring;
-import gqlexample.gql.WiringTypeName;
 import graphql.schema.DataFetchingEnvironment;
 
 import javax.inject.Inject;
@@ -41,7 +39,7 @@ public class ExerciseFetcher implements DataFetcherWithWiring<List<Exercise>> {
     }
 
     @Override
-    public WiringTypeName getWiringType() {
-        return WiringTypeName.QUERY;
+    public String getWiringType() {
+        return WiringTypeName.QUERY.getType();
     }
 }

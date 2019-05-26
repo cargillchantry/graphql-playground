@@ -1,8 +1,13 @@
-type Query {
+schema {
+    query: ExerciseQuery,
+    mutation: ExerciseMutation
+}
+
+type ExerciseQuery {
     exercises(exerciseType: ExerciseType, duration: Duration): [Exercise!]!
 }
 
-type Mutation {
+type ExerciseMutation {
     createExercise(exerciseType: ExerciseType, duration: Duration): Exercise
 }
 

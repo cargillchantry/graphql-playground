@@ -4,13 +4,10 @@ import gqlexample.exercise.Exercise;
 import gqlexample.exercise.ExerciseType;
 import gqlexample.exercise.repository.ExerciseRepository;
 import gqlexample.gql.DataFetcherWithWiring;
-import gqlexample.gql.WiringTypeName;
 import graphql.schema.DataFetchingEnvironment;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import java.time.Duration;
 
 import static gqlexample.exercise.fetchers.ExerciseFieldName.CREATE_EXERCISE;
 import static gqlexample.utils.NullUtils.nullSafeMap;
@@ -31,8 +28,8 @@ public class ExerciseCreateFetcher implements DataFetcherWithWiring<Exercise> {
     }
 
     @Override
-    public WiringTypeName getWiringType() {
-        return WiringTypeName.MUTATION;
+    public String getWiringType() {
+        return WiringTypeName.MUTATION.getType();
     }
 
     @Override

@@ -12,9 +12,9 @@ import graphql.schema.idl.TypeDefinitionRegistry;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.core.io.ResourceResolver;
-
 import javax.inject.Singleton;
-import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collection;
 
@@ -27,14 +27,18 @@ public class GraphQLFactory {
         final ResourceResolver resourceResolver,
         final Collection<DataFetcherWithWiring<?>> dataFetchers,
         final DurationCoercing durationCoercing
-        ) {
+    ) throws IOException {
         final SchemaParser schemaParser = new SchemaParser();
         final SchemaGenerator schemaGenerator = new SchemaGenerator();
 
         // Parse the schema.
         final TypeDefinitionRegistry typeRegistry = new TypeDefinitionRegistry();
-        typeRegistry.merge(schemaParser.parse(new BufferedReader(new InputStreamReader(
-            resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()))));
+
+        try(final InputStream stream = ClassLoader.getSystemResourceAsStream("schema.graphqls");
+            final InputStreamReader reader = new InputStreamReader(stream)
+        ) {
+            typeRegistry.merge(schemaParser.parse(reader));
+        }
 
         // Create the runtime wiring.
         final RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring().scalar(GraphQLScalarType.newScalar()
@@ -45,7 +49,7 @@ public class GraphQLFactory {
         );
         for(final DataFetcherWithWiring<?> fetcher: dataFetchers) {
             builder.type(
-                fetcher.getWiringType().getType(),
+                fetcher.getWiringType(),
                 typeWiring -> typeWiring.dataFetcher(fetcher.getFieldName(), fetcher)
             );
         }

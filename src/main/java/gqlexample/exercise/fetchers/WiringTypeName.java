@@ -1,7 +1,7 @@
-package gqlexample.gql;
+package gqlexample.exercise.fetchers;
 
 public enum WiringTypeName {
-    MUTATION("Mutation"), QUERY("Query");
+    MUTATION("ExerciseMutation"), QUERY("ExerciseQuery");
 
     private final String type;
 
