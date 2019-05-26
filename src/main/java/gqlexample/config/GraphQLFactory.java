@@ -1,7 +1,9 @@
 package gqlexample.config;
 
 import gqlexample.gql.DataFetcherWithWiring;
+import gqlexample.gql.DurationCoercing;
 import graphql.GraphQL;
+import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
@@ -23,8 +25,9 @@ public class GraphQLFactory {
     @Bean
     public GraphQL graphQL(
         final ResourceResolver resourceResolver,
-        final Collection<DataFetcherWithWiring<?>> dataFetchers
-    ) {
+        final Collection<DataFetcherWithWiring<?>> dataFetchers,
+        final DurationCoercing durationCoercing
+        ) {
         final SchemaParser schemaParser = new SchemaParser();
         final SchemaGenerator schemaGenerator = new SchemaGenerator();
 
@@ -34,7 +37,12 @@ public class GraphQLFactory {
             resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()))));
 
         // Create the runtime wiring.
-        final RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring();
+        final RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring().scalar(GraphQLScalarType.newScalar()
+            .coercing(durationCoercing)
+            .description("Parses Duration strings from the ISO-8601.")
+            .name("Duration")
+            .build()
+        );
         for(final DataFetcherWithWiring<?> fetcher: dataFetchers) {
             builder.type(
                 fetcher.getWiringType().getType(),

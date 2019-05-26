@@ -43,10 +43,7 @@ public class ExerciseCreateFetcher implements DataFetcherWithWiring<Exercise> {
                     dataFetchingEnvironment.<String>getArgument("exerciseType"),
                     ExerciseType::valueOf
                 ))
-                .setDuration(nullSafeMap(
-                    dataFetchingEnvironment.<String>getArgument("duration"),
-                    Duration::parse
-                ))
+                .setDuration(dataFetchingEnvironment.getArgument("duration"))
                 .build()
         );
     }

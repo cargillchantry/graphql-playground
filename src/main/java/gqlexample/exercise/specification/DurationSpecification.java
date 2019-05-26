@@ -6,14 +6,14 @@ import gqlexample.structure.Specification;
 import java.time.Duration;
 
 public class DurationSpecification implements Specification<Exercise> {
-    private final String duration;
+    private final Duration duration;
 
-    DurationSpecification(final String duration) {
+    DurationSpecification(final Duration duration) {
         this.duration = duration;
     }
 
     @Override
     public boolean satisfiedBy(final Exercise element) {
-        return element.getDuration().equals(Duration.parse(duration));
+        return element.getDuration().equals(duration);
     }
 }
