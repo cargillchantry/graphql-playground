@@ -1,5 +1,5 @@
 type Query {
-    exercises(exerciseType: ExerciseType): [Exercise!]!
+    exercises(exerciseType: ExerciseType, duration: String): [Exercise!]!
 }
 
 type Mutation {
