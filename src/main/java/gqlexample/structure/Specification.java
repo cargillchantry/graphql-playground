@@ -1,4 +1,4 @@
-package gqlexample.storage;
+package gqlexample.structure;
 
 public interface Specification<T> {
     boolean satisfiedBy(final T element);

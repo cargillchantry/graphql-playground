@@ -3,6 +3,7 @@ package gqlexample.exercise.fetchers;
 import gqlexample.exercise.Exercise;
 import gqlexample.exercise.ExerciseType;
 import gqlexample.exercise.repository.ExerciseRepository;
+import gqlexample.exercise.specification.ExerciseSpecificationCombiner;
 import gqlexample.gql.DataFetcherWithWiring;
 import gqlexample.gql.WiringTypeName;
 import graphql.schema.DataFetchingEnvironment;
@@ -16,20 +17,22 @@ import static gqlexample.exercise.fetchers.ExerciseFieldName.EXERCISES;
 @Singleton
 public class ExerciseFetcher implements DataFetcherWithWiring<List<Exercise>> {
     private final ExerciseRepository exerciseRepository;
+    private final ExerciseSpecificationCombiner exerciseSpecificationCombiner;
 
     @Inject
-    public ExerciseFetcher(final ExerciseRepository exerciseRepository) {
+    public ExerciseFetcher(
+        final ExerciseRepository exerciseRepository,
+        final ExerciseSpecificationCombiner exerciseSpecificationCombiner
+    ) {
         this.exerciseRepository = exerciseRepository;
+        this.exerciseSpecificationCombiner = exerciseSpecificationCombiner;
     }
 
     @Override
     public List<Exercise> get(final DataFetchingEnvironment env) {
-        if(env.containsArgument("exerciseType")) {
-            return exerciseRepository.findBy(
-                exercise -> exercise.getExerciseType() == ExerciseType.valueOf(env.getArgument("exerciseType"))
-            );
-        }
-        return exerciseRepository.findAll();
+        return exerciseSpecificationCombiner.generate(env)
+            .map(exerciseRepository::findBy)
+            .orElseGet(exerciseRepository::findAll);
     }
 
     @Override

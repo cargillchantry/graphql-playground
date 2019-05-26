@@ -1,7 +1,7 @@
 package gqlexample.exercise.repository;
 
 import gqlexample.exercise.Exercise;
-import gqlexample.storage.Specification;
+import gqlexample.structure.Specification;
 
 import javax.inject.Singleton;
 import java.util.HashMap;
